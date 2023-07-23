@@ -6,7 +6,25 @@ import roomRepository from '../../repositories/rooms-repository';
 import { requestError } from '../../errors';
 
 
+async function verifyEnrollmentTicket(userId: number) {
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+  if (!enrollment) throw requestError(403, 'Forbidden');
 
+  const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
+
+  if (!ticket || ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
+    throw requestError(403, 'Forbidden');
+  }
+
+}
+
+async function verifyValidBooking(roomId: number) {
+  const room = await roomRepository.findById(roomId);
+  const bookings = await bookingRepository.findBookingByRoomId(roomId);
+
+  if (!room) throw notFoundError();
+  if (room.capacity <= bookings.length) throw requestError(403, 'Forbidden');
+}
 async function getBooking(userId: number) {
   const booking = await bookingRepository.findBookingByUserId(userId);
   if (!booking) throw notFoundError();
@@ -57,11 +75,13 @@ async function updateBookingRoomById(userId: number, roomId: number) {
   });
 }
 
-const bookingService = {
-  bookingRoomById,
-  getBooking,
-  getHotelBookings,
-  updateBookingRoomById
-};
+  const bookingService = {
+    bookingRoomById,
+    getBooking,
+    getHotelBookings,
+    updateBookingRoomById,
+    verifyEnrollmentTicket,
+    verifyValidBooking,
+  };
 
 export default bookingService;

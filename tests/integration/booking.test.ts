@@ -223,7 +223,7 @@ describe('POST /booking', () => {
     it('should respond with status 403 if user has not enrollment', async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
-      const ticketType = await createTicketTypeWithHotel();
+     
 
       const hotel = await createHotel();
       const room = await createRoomWithHotelId(hotel.id);

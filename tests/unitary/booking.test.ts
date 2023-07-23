@@ -15,6 +15,7 @@ import {
   import enrollmentRepository from '@/repositories/enrollment-repository';
   import roomRepository from '@/repositories/rooms-repository';
   import ticketsRepository from '@/repositories/tickets-repository';
+import httpStatus from 'http-status';
   
   describe('getBooking function', () => {
     it('should return the booking for the given user id', async () => {
@@ -51,7 +52,7 @@ import {
   
       
       jest.spyOn(roomRepository, 'findById').mockResolvedValue(findRoomByIdReturn());
-     // jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdReturn());
+      jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdReturn());
   
       jest.spyOn(bookingRepository, 'createBooking').mockResolvedValue(booking);
   
@@ -70,7 +71,7 @@ import {
   
       
       jest.spyOn(roomRepository, 'findById').mockResolvedValue(findRoomByIdReturn());
-      //jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdReturn());
+      jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdReturn());
   
       jest.spyOn(bookingRepository, 'findBookingByUserId').mockResolvedValue(booking);
       jest.spyOn(bookingRepository, 'updateBooking').mockResolvedValue(booking);
@@ -86,7 +87,7 @@ import {
   
      
       jest.spyOn(roomRepository, 'findById').mockResolvedValue(findRoomByIdReturn());
-      //jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdReturn());
+      jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdReturn());
   
       jest.spyOn(bookingRepository, 'findBookingByUserId').mockResolvedValue(null);
   
@@ -100,7 +101,7 @@ import {
   
      
       jest.spyOn(roomRepository, 'findById').mockResolvedValue(findRoomByIdReturn());
-    //  jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdReturn());
+      jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdReturn());
   
       jest.spyOn(bookingRepository, 'findBookingByUserId').mockResolvedValue(booking);
       jest.spyOn(bookingRepository, 'updateBooking').mockResolvedValue(booking);
@@ -109,12 +110,12 @@ import {
     });
   });
   
-  describe('checkEnrollmentTicket function', () => {
+  describe('verifyEnrollmentTicket function', () => {
     it('should return error in find enrollment', async () => {
       const userId = 1;
       const roomId = 1;
   
-     // jest.spyOn(bookingService, 'checkEnrollmentTicket').mockResolvedValue(undefined);
+      jest.spyOn(bookingService, 'verifyEnrollmentTicket').mockResolvedValue(undefined);
       jest.spyOn(enrollmentRepository, 'findWithAddressByUserId').mockResolvedValue(null);
   
       await expect(bookingService.bookingRoomById(userId, roomId)).rejects.toEqual(notFoundError());
@@ -134,22 +135,22 @@ import {
     });
   });
   
-  describe('checkValidBooking function', () => {
+  describe('verifyValidBooking function', () => {
     it('should return error in find room by id', async () => {
       const roomId = 1;
   
       jest.spyOn(roomRepository, 'findById').mockResolvedValue(null);
-      //jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdReturn());
+      jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdReturn());
   
-     // await expect(bookingService.checkValidBooking(roomId)).rejects.toEqual(notFoundError());
+      await expect(bookingService.verifyValidBooking(roomId)).rejects.toEqual(notFoundError());
     });
   
     it('should return error in fin booking by Room Id', async () => {
       const roomId = 1;
   
       jest.spyOn(roomRepository, 'findById').mockResolvedValue(findRoomByIdNoCapacityReturn());
-//jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdNoCapacityReturn());
+      jest.spyOn(bookingRepository, 'findBookingByRoomId').mockResolvedValue(findBookingByRoomIdNoCapacityReturn());
   
-      //await expect(bookingService.checkValidBooking(roomId)).rejects.toEqual(cannotBookingError());
+      await expect(bookingService.verifyValidBooking(roomId)).rejects.toEqual(httpStatus.FORBIDDEN);
     });
   });

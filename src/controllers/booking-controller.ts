@@ -30,7 +30,7 @@ export async function selectBookingRoom(req: AuthenticatedRequest, res: Response
     if (error.name === 'NotFoundError') {
       return res.status(httpStatus.BAD_REQUEST)
     }
-    else if (error.message === 'Forbidden'){
+    else if (error.statusText === 'Forbidden'){
       return res.status(httpStatus.FORBIDDEN)
     }
   }
@@ -52,7 +52,7 @@ export async function updateBooking(req: AuthenticatedRequest, res: Response) {
     if (error.name === 'NotFoundError') {
       return res.status(httpStatus.BAD_REQUEST)
     }
-    else if (error.message === 'Forbidden'){
+    else if (error.statusText === 'Forbidden'){
       return res.status(httpStatus.FORBIDDEN)
     }
   }
