@@ -1,5 +1,4 @@
 import { notFoundError } from '@/errors/not-found-error';
-import { requestError } from '@/errors/request-error';
 import enrollmentRepository from '@/repositories/enrollment-repository';
 import ticketsRepository from '@/repositories/tickets-repository';
 import bookingRepository from '@/repositories/booking-repository';
