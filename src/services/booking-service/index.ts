@@ -8,7 +8,7 @@ import { requestError } from '../../errors';
 
 async function verifyEnrollmentTicket(userId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  if (!enrollment) throw requestError(403, 'Forbidden');
+  if (!enrollment) throw notFoundError;
 
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
 
@@ -21,7 +21,7 @@ async function verifyEnrollmentTicket(userId: number) {
 async function verifyValidBooking(roomId: number) {
   const room = await roomRepository.findById(roomId);
   const bookings = await bookingRepository.findBookingByRoomId(roomId);
-
+  
   if (!room) throw notFoundError();
   if (room.capacity <= bookings.length) throw requestError(403, 'Forbidden');
 }

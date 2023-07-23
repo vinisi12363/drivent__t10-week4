@@ -14,7 +14,7 @@ export async function getBooking(req: AuthenticatedRequest, res: Response) {
     });
   } catch (error) {
     if (error.name === 'NotFoundError') {
-        return res.status(httpStatus.BAD_REQUEST)
+        return res.status(httpStatus.NOT_FOUND)
     }
 
   }
@@ -28,10 +28,10 @@ export async function selectBookingRoom(req: AuthenticatedRequest, res: Response
     return res.status(httpStatus.OK).send({ bookingId: result.id });
   } catch (error) {
     if (error.name === 'NotFoundError') {
-      return res.status(httpStatus.BAD_REQUEST)
+      return res.status(httpStatus.NOT_FOUND)
     }
     else if (error.statusText === 'Forbidden'){
-      return res.status(httpStatus.FORBIDDEN)
+      return res.status(403).send(error.statusText)
     }
   }
  
@@ -50,10 +50,10 @@ export async function updateBooking(req: AuthenticatedRequest, res: Response) {
     return res.status(httpStatus.OK).send({ bookingId: booking.id })
   } catch (error) {
     if (error.name === 'NotFoundError') {
-      return res.status(httpStatus.BAD_REQUEST)
+      return res.status(httpStatus.NOT_FOUND)
     }
     else if (error.statusText === 'Forbidden'){
-      return res.status(httpStatus.FORBIDDEN)
+      return res.status(403).send(error.statusText)
     }
   }
 }
