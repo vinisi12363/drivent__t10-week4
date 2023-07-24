@@ -26,10 +26,10 @@ export async function selectBookingRoom(req: AuthenticatedRequest, res: Response
   const { roomId } = req.body as Record<string, number>;
   
     const resultId = await bookingService.bookingRoomById(userId, roomId);
-    console.log ("result  do post", resultId)
+  
     return res.send({ bookingId: resultId });
   } catch (error) {
-    console.log ("erro do post", error)
+   
     if (error.name === 'NotFoundError') {
       return res.status(httpStatus.NOT_FOUND).send({name:"not Found", message:"No result for this search"})
     }
@@ -53,6 +53,7 @@ export async function updateBooking(req: AuthenticatedRequest, res: Response) {
     const updatedBooking = await bookingService.updateBookingRoomById(userId, bookingId, roomId)
     return res.send({ bookingId: updatedBooking })
   } catch (error) {
+    console.log ("erro do update", error)
     if (error.name === 'NotFoundError') {
       return res.status(httpStatus.NOT_FOUND)
     }
