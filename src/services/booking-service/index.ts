@@ -68,6 +68,7 @@ async function bookingRoomById(userId: number, roomId: number) {
 
 async function updateBookingRoomById(userId: number, bookingId:number ,roomId: number) {
   if(!bookingId) throw requestError(403, 'Forbidden');
+ 
   if (!roomId) throw notFoundError();
   //verificar se o user tem quarto reservado
   const originalReserve = await bookingRepository.findBookingByUserId(userId);
