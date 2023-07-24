@@ -43,19 +43,19 @@ async function bookingRoomById(userId: number, roomId: number) {
   if (!roomId || roomId === null) throw notFoundError();
 
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
-  const room = await roomRepository.findById(roomId)
-  const reservedbookings = await bookingRepository.findBookingByRoomId(roomId);
-
-  
   if (!enrollment) throw notFoundError();
+  
 
+  const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
   if (!ticket || ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
     throw requestError(403, 'Forbidden');
   }
 
+  const room = await roomRepository.findById(roomId)
+
+
   if (!room) throw Error('notFound');
- 
+  const reservedbookings = await bookingRepository.findBookingByRoomId(roomId);
   if (reservedbookings.length === room.capacity)   throw requestError(403, 'Forbidden');
  
 
