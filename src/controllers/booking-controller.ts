@@ -38,7 +38,7 @@ export async function selectBookingRoom(req: AuthenticatedRequest, res: Response
       return res.sendStatus(httpStatus.FORBIDDEN).send({name:"Forbidden access", message:"you don't have authorization to acces"})
     }
 
-    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR)
+   // return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR)
   }
  
 }
@@ -49,8 +49,9 @@ export async function updateBooking(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const bookingId = Number(req.params.bookingId);
   const { roomId } = req.body as Record<string, number>;
- 
+    console.log("ROOM ID  ANTERIOR", roomId)
     const updatedBooking = await bookingService.updateBookingRoomById(userId, bookingId, roomId)
+    console.log ("Updated id", updatedBooking)
     return res.send({ bookingId: updatedBooking })
   } catch (error) {
     console.log ("erro do update", error)

@@ -300,11 +300,11 @@ describe('PUT /booking', () => {
     await createTicket(enrollment.id, ticketType.id, 'PAID');
     const hotel = await createHotel();
     const room = await createRoomWithHotelId(hotel.id);
-    const roomTwo = await createCustomRoomWithHotelId(hotel.id, 1);
-    const booking = await createRoom(user.id, room.id);
+    const customRoom = await createCustomRoomWithHotelId(hotel.id, 1);
+    const booking = await createRoom(user.id, customRoom.id);
     const response = await server
       .put(`/booking/${booking.id}`)
-      .send({ roomId: roomTwo.id })
+      .send({ roomId: customRoom.id })
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(httpStatus.NOT_FOUND);
