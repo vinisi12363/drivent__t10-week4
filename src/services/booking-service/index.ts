@@ -97,7 +97,7 @@ async function updateBookingRoomById(userId: number, bookingId:number ,roomId: n
   return updatedBooking.id
 }
 
-  const bookingService = {
+  const bookingService = { 
     bookingRoomById,
     getBooking,
     updateBookingRoomById,
