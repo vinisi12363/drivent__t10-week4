@@ -193,23 +193,7 @@ describe('POST /booking', () => {
     });
   });
 
-  /*it('should respond Forbidden Error', async () => {
-    const user = await createUser();
-    const enrollment = await createEnrollmentWithAddress(user);
-    const ticketType = await createTicketTypeRemote();
-    await createTicket(enrollment.id, ticketType.id, 'PAID');
-    const hotel = await createHotel();
-    const room = await createRoomWithHotelId(hotel.id);
-
-    try {
-      const response = await bookingService.bookingRoomById(user.id, room.id);
-      expect(response).toEqual({
-        bookingId: expect.any(Number),
-      });
-    } catch (error) {
-      expect(error).toBe(httpStatus.FORBIDDEN);
-    }
-  });*/
+  
   it("should respond with 404 when no room ", async () => {
     const user = await createUser();
     const token = await generateValidToken(user);
@@ -220,13 +204,12 @@ describe('POST /booking', () => {
 
     const hotel = await createHotel();
     const room = await createRoomWithHotelId(hotel.id);
-
     const validBody = createValidBody();
     const response = await server
       .post('/booking')
       .set('Authorization', `Bearer ${token}`)
       .send({ 
-        roomId: 155,
+        roomId: 9,
       });
 
     expect(response.status).toEqual(httpStatus.NOT_FOUND);
@@ -309,7 +292,7 @@ describe('PUT /booking', () => {
     expect(response.status).toBe(httpStatus.FORBIDDEN);
   });
 
-  it('should return 404 when new room dont exists', async () => {
+  it('should return 404 when room dont exists', async () => {
     const user = await createUser();
     const token = await generateValidToken(user);
     const enrollment = await createEnrollmentWithAddress(user);
@@ -321,7 +304,7 @@ describe('PUT /booking', () => {
     const booking = await createRoom(user.id, room.id);
     const response = await server
       .put(`/booking/${booking.id}`)
-      .send({ roomId: 9 })
+      .send({ roomId: roomTwo.id })
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(httpStatus.NOT_FOUND);
