@@ -12,6 +12,7 @@ import {
   createTicketTypeWithHotel,
   createCustomRoomWithHotelId,
   createHotel,
+  createRoom,
   createRoomWithHotelId,
 } from '../factories';
 import { cleanDb, generateValidToken } from '../helpers';
@@ -316,10 +317,11 @@ describe('PUT /booking', () => {
     await createTicket(enrollment.id, ticketType.id, 'PAID');
     const hotel = await createHotel();
     const room = await createRoomWithHotelId(hotel.id);
-    const booking = await createBooking(user.id,room.id);
+    const roomTwo = await createCustomRoomWithHotelId(hotel.id, 1);
+    const booking = await createRoom(user.id, room.id);
     const response = await server
       .put(`/booking/${booking.id}`)
-      .send({ roomId: 125 })
+      .send({ roomId: 9 })
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(httpStatus.NOT_FOUND);

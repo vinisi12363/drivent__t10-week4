@@ -60,6 +60,7 @@ async function updateBookingRoomById(userId: number, bookingId:number ,roomId: n
   const bookingsToRoom = await bookingRepository.findBookingByRoomId(roomId);
   if (room.capacity <= bookingsToRoom) throw requestError(403, 'Forbidden');
   
+  
   //verificar se é possivel alocar o novo booking , se existe o id
   const newBooking = await bookingRepository.findBookingById(bookingId);
   if (!newBooking) {
