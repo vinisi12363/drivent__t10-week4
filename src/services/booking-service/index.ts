@@ -21,8 +21,9 @@ async function verifyEnrollmentTicket(userId: number) {
 async function verifyValidBooking(roomId: number) {
   const room = await roomRepository.findById(roomId);
   const bookings = await bookingRepository.findBookingByRoomId(roomId);
+  if (room.capacity <= bookings.length && room !== null) throw requestError(403, 'Forbidden');
   if (!room) throw notFoundError();
-  if (room.capacity <= bookings.length) throw requestError(403, 'Forbidden');
+  
 }
 
 
@@ -72,7 +73,7 @@ async function updateBookingRoomById(userId: number, bookingId:number ,roomId: n
   //verificaer se o quarto que ele quer verificar existe 
   const room = await roomRepository.findById(roomId);
   if (!room) throw notFoundError();
-  verifyValidBooking(roomId)
+  await verifyValidBooking(roomId)
   //verificar se o quarto que ele quer deletar é dele 
   const deletedBooking = await bookingRepository.findBookingByUserId(userId);
   if (!deletedBooking || deletedBooking.userId !== userId) throw requestError(403, 'Forbidden');
