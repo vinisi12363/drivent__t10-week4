@@ -206,7 +206,7 @@ describe('POST /booking', () => {
         bookingId: expect.any(Number),
       });
     } catch (error) {
-      expect(error).toEqual(httpStatus.FORBIDDEN);
+      expect(error).toBe(httpStatus.FORBIDDEN);
     }
   });
   it("should respond with 404 when no room ", async () => {
