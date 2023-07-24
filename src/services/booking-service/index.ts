@@ -79,16 +79,19 @@ async function updateBookingRoomById(userId: number, bookingId:number ,roomId: n
   //verificaer se o quarto que ele quer verificar existe 
   const room = await roomRepository.findById(roomId);
   if (!room) throw notFoundError();
-  const bookings = await bookingRepository.findBookingByRoomId(roomId);
-  if (room.capacity <= bookings.length && room !== null) throw requestError(403, 'Forbidden');
-  //verificar se o quarto que ele quer deletar é dele 
-  const deletedBooking = await bookingRepository.findBookingByUserId(userId);
-  if (!deletedBooking || deletedBooking.userId !== userId) throw requestError(403, 'Forbidden');
+
+  const reservedBookings = await bookingRepository.findBookingByRoomId(roomId);
+  if (room.capacity <= reservedBookings.length) throw requestError(403, 'Forbidden');
+  
   //verificar se é possivel alocar o novo booking , se existe o id
   const newBooking = await bookingRepository.findBookingById(bookingId);
   if (!newBooking) {
     throw notFoundError();
   }
+  //verificar se o quarto que ele quer deletar é dele 
+  const deletedBooking = await bookingRepository.findBookingByUserId(userId);
+  if (!deletedBooking || deletedBooking.userId !== userId) throw requestError(403, 'Forbidden');
+  
 
   
   const updatedBooking = await bookingRepository.updateBooking({
