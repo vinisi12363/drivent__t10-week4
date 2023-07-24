@@ -34,8 +34,8 @@ async function bookingRoomById(userId: number, roomId: number) {
 
 
   if (!room) throw notFoundError();
-  const reservedbookings = await bookingRepository.findBookingByRoomId(roomId);
-  if (reservedbookings.length === room.capacity)   throw requestError(403, 'Forbidden');
+  const reservedBookings = await bookingRepository.findBookingByRoomId(roomId);
+  if (reservedBookings === room.capacity)   throw requestError(403, 'Forbidden');
  
 
   const createdBooking=   await bookingRepository.createBooking( roomId, userId );
@@ -44,21 +44,21 @@ async function bookingRoomById(userId: number, roomId: number) {
 }
 
 async function updateBookingRoomById(userId: number, bookingId:number ,roomId: number) {
-  if(!bookingId || bookingId === null) throw requestError(403, 'Forbidden');
-  if (!roomId || roomId === null) throw notFoundError();
+  if(!bookingId ) throw requestError(403, 'Forbidden');
+  if (!roomId ) throw notFoundError();
   
-  //verificar se o user tem quarto reservado
-  const originalReserve = await bookingRepository.findBookingByUserId(userId);
+ 
+  const originalBooking = await bookingRepository.findBookingByUserId(userId);
 
-  if (!originalReserve) {
+  if (!originalBooking) {
     throw requestError(403, 'Forbidden');
   }
-  //verificaer se o quarto que ele quer verificar existe 
+
   const room = await roomRepository.findById(roomId);
   if (!room) throw notFoundError();
 
-  const reservedBookings = await bookingRepository.findBookingByRoomId(roomId);
-  if (room.capacity <= reservedBookings.length) throw requestError(403, 'Forbidden');
+  const bookingsToRoom = await bookingRepository.findBookingByRoomId(roomId);
+  if (room.capacity <= bookingsToRoom) throw requestError(403, 'Forbidden');
   
   //verificar se é possivel alocar o novo booking , se existe o id
   const newBooking = await bookingRepository.findBookingById(bookingId);
@@ -71,7 +71,7 @@ async function updateBookingRoomById(userId: number, bookingId:number ,roomId: n
   
 
   
-  const updatedBooking = await bookingRepository.updateBooking(deletedBooking.id,roomId, userId);
+  const updatedBooking = await bookingRepository.updateBooking(deletedBooking.id,roomId);
 
   return updatedBooking.id
 }
