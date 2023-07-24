@@ -7,6 +7,7 @@ async function createBooking( roomId:number, userId:number ): Promise<Booking> {
     data: {
       roomId,
       userId,
+      updatedAt: new Date(),
     },
   });
 }
@@ -39,7 +40,7 @@ async function findBookingByUserId(userId: number) {
     },
     include: {
       Room: true,
-    },
+    }
   });
 }
 async function findBookingByHotelId(hotelId: number) {

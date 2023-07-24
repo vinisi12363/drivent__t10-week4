@@ -6,27 +6,6 @@ import roomRepository from '../../repositories/rooms-repository';
 import { requestError } from '../../errors';
 
 
-/*async function verifyEnrollmentTicket(userId: number) {
-  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  if (!enrollment) throw notFoundError();
-
-  const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
-
-  if (!ticket || ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
-    throw requestError(403, 'Forbidden');
-  }
-
-}
-
-async function verifyValidBooking(roomId: number) {
-  const room = await roomRepository.findById(roomId);
-  const bookings = await bookingRepository.findBookingByRoomId(roomId);
-  if (room.capacity <= bookings.length && room !== null) throw requestError(403, 'Forbidden');
-  if (!room) throw notFoundError();
-  
-}*/
-
-
 async function getBooking(userId: number) {
   const booking = await bookingRepository.findBookingByUserId(userId);
   
@@ -66,8 +45,8 @@ async function bookingRoomById(userId: number, roomId: number) {
 
 async function updateBookingRoomById(userId: number, bookingId:number ,roomId: number) {
   if(!bookingId || bookingId === null) throw requestError(403, 'Forbidden');
- 
   if (!roomId || roomId === null) throw notFoundError();
+  
   //verificar se o user tem quarto reservado
   const originalReserve = await bookingRepository.findBookingByUserId(userId);
 
@@ -101,7 +80,7 @@ async function updateBookingRoomById(userId: number, bookingId:number ,roomId: n
     bookingRoomById,
     getBooking,
     updateBookingRoomById,
-  
+
   };
 
 export default bookingService;
