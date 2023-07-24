@@ -224,7 +224,7 @@ describe('POST /booking', () => {
     const response = await server
       .post('/booking')
       .set('Authorization', `Bearer ${token}`)
-      .send({
+      .send({ 
         roomId: 155,
       });
 
