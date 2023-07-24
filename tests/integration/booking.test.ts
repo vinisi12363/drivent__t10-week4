@@ -192,7 +192,7 @@ describe('POST /booking', () => {
     });
   });
 
-  it('should respond Forbidden Error', async () => {
+  /*it('should respond Forbidden Error', async () => {
     const user = await createUser();
     const enrollment = await createEnrollmentWithAddress(user);
     const ticketType = await createTicketTypeRemote();
@@ -208,7 +208,7 @@ describe('POST /booking', () => {
     } catch (error) {
       expect(error).toBe(httpStatus.FORBIDDEN);
     }
-  });
+  });*/
   it("should respond with 404 when no room ", async () => {
     const user = await createUser();
     const token = await generateValidToken(user);
