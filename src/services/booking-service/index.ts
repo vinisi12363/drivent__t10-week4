@@ -8,7 +8,7 @@ import { requestError } from '../../errors';
 
 async function verifyEnrollmentTicket(userId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  if (!enrollment) throw notFoundError;
+  if (!enrollment) throw notFoundError();
 
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
 
@@ -43,15 +43,15 @@ async function bookingRoomById(userId: number, roomId: number) {
  
 
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  if (!enrollment)throw notFoundError;
+  if (!enrollment)throw notFoundError();
   if (!roomId) throw notFoundError();
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
-
+  const room = await roomRepository.findById(roomId);
+  if (!room) throw notFoundError();
   if (!ticket || ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
     throw requestError(403, 'Forbidden');
   }
-  const room = await roomRepository.findById(roomId);
-  if (!room) throw notFoundError();
+  
 
   const reservedbookings = await bookingRepository.findBookingByRoomId(roomId);
   if (reservedbookings.length === room.capacity)   throw requestError(403, 'Forbidden');
@@ -84,14 +84,13 @@ async function updateBookingRoomById(userId: number, bookingId:number ,roomId: n
     throw notFoundError();
   }
 
-  if(newBooking)
   
-
-  return bookingRepository.updateBooking({
+  const updatedBooking = await bookingRepository.updateBooking({
     id: deletedBooking.id,
-    roomId,
-    userId,
-  });
+    roomId:roomId,
+    userId:userId});
+
+  return updatedBooking.id
 }
 
   const bookingService = {
