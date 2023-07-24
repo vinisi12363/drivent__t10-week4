@@ -43,36 +43,62 @@ async function bookingRoomById(userId: number, roomId: number) {
   return  createdBooking.id
 }
 
-async function updateBookingRoomById(userId: number, bookingId:number ,roomId: number) {
+async function updateBookingRoomById(userId: number, bookingId:number ,newRoomId: number) {
   if(!bookingId ) throw requestError(403, 'Forbidden');
-  if (!roomId ) throw notFoundError();
-  
+  if (!newRoomId ) throw notFoundError();
+  console.log ("BOOKING ID ", bookingId , "NEW ROOM ID" , newRoomId)
  
-  const originalBooking = await bookingRepository.findBookingByUserId(userId);
 
+
+  const originalBooking = await bookingRepository.findBookingByUserId(userId);
+  console.log("ORIGINAL BOOKING",originalBooking)
   if (!originalBooking) {
+    console.log("entrou no if do original oboking")
     throw requestError(403, 'Forbidden');
   }
 
-  const room = await roomRepository.findById(roomId);
-  if (!room) throw notFoundError();
+  const room = await roomRepository.findById(newRoomId);
+  console.log("ROOM",room)
+  if (!room || room === null) {
+   console.log( "entrou aqui no erro null")
+   throw notFoundError();
+  }
+ 
 
-  const bookingsToRoom = await bookingRepository.findBookingByRoomId(roomId);
-  if (room.capacity <= bookingsToRoom) throw requestError(403, 'Forbidden');
+  const bookingsToRoom = await bookingRepository.findBookingByRoomId(newRoomId);
+  console.log("bookingsToRoom",bookingsToRoom)
+
+   const Allrooms  =await  roomRepository.findAllRooms();
+   console.log("Allrooms", Allrooms)
+
+  if (room.capacity <= bookingsToRoom){
+      console.log("room capacity", room.capacity , " bookingsToRoom " , bookingsToRoom)
+    
+    throw requestError(403, 'Forbidden');
   
-  
+  }
+
   //verificar se é possivel alocar o novo booking , se existe o id
   const newBooking = await bookingRepository.findBookingById(bookingId);
+  console.log("newBooking",newBooking)
   if (!newBooking) {
     throw notFoundError();
   }
   //verificar se o quarto que ele quer deletar é dele 
   const deletedBooking = await bookingRepository.findBookingByUserId(userId);
-  if (!deletedBooking || deletedBooking.userId !== userId) throw requestError(403, 'Forbidden');
+  console.log("deletedBooking",deletedBooking)
+  if (!deletedBooking || deletedBooking.userId !== userId) {
+    console.log("entrou no if do deletedbooking")
+    throw requestError(403, 'Forbidden');
   
+  }
+  const existingBooking = await bookingRepository.findBookingById(bookingId);
 
+  if (!existingBooking) {
+    throw notFoundError();
+  }
   
-  const updatedBooking = await bookingRepository.updateBooking(deletedBooking.id,roomId);
+  const updatedBooking = await bookingRepository.updateBooking(deletedBooking.id,newRoomId);
 
   return updatedBooking.id
 }

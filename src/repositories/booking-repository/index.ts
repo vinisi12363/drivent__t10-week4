@@ -33,7 +33,7 @@ async function findBookingByRoomId(roomId: number) {
 async function findBookingByUserId(userId: number) {
   return prisma.booking.findFirst({
     where: {
-      userId: userId,
+    userId
     },
     include: {
       Room: true,

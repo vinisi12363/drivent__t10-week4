@@ -3,12 +3,16 @@ import { prisma } from '@/config';
 async function findById(id: number) {
   return prisma.room.findUnique({
     where: {
-      id: id,
+      id
     }
   });
 }
+async function findAllRooms(){
+  return prisma.room.findMany({})
+}
 const roomRepository = {
   findById,
+  findAllRooms
 
 };
 
