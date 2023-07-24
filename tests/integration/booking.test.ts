@@ -160,7 +160,7 @@ describe('POST /booking', () => {
   it('should respond with status 404 when user no have enrrolment', async () => {
     const user = await createUser();
     const token = await generateValidToken(user);
-    const body = { roomId: 3 };
+    const body = { roomId: 4 };
     const response = await server.post('/booking').set('Authorization', `Bearer ${token}`).send(body);
     expect(response.status).toBe(httpStatus.NOT_FOUND);
   });
@@ -269,7 +269,7 @@ describe('PUT /booking', () => {
 
     expect(response.status).toBe(httpStatus.OK);
     expect(response.body).toEqual({
-      roomId: expect.any(Number),
+      bookingId: expect.any(Number),
     });
   });
 

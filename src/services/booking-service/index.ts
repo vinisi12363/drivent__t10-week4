@@ -40,13 +40,11 @@ async function getBooking(userId: number) {
 }
 
 async function bookingRoomById(userId: number, roomId: number) {
- 
+  if (!roomId) throw notFoundError();
 
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   
-  if (!enrollment)throw notFoundError();
-  
-  if (!roomId) throw notFoundError();
+  if (!enrollment) throw notFoundError();
   
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
   const room = await roomRepository.findById(roomId)
