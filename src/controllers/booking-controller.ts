@@ -24,8 +24,8 @@ export async function selectBookingRoom(req: AuthenticatedRequest, res: Response
   try {
   const { userId } = req;
   const { roomId } = req.body as Record<string, number>;
-    const result = await bookingService.bookingRoomById(userId, roomId);
-    return res.status(httpStatus.OK).send({ bookingId: result });
+    const resultId = await bookingService.bookingRoomById(userId, roomId);
+    return res.send({ bookingId: resultId });
   } catch (error) {
     if (error.name === 'NotFoundError') {
       return res.status(httpStatus.NOT_FOUND)
@@ -52,7 +52,7 @@ export async function updateBooking(req: AuthenticatedRequest, res: Response) {
 
   
     const updatedBooking = await bookingService.updateBookingRoomById(userId, bookingId, roomId)
-    return res.status(httpStatus.OK).send({ bookingId: Number(updatedBooking) })
+    return res.send({ bookingId: updatedBooking })
   } catch (error) {
     if (error.name === 'NotFoundError') {
       return res.status(httpStatus.NOT_FOUND)
