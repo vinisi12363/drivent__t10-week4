@@ -301,7 +301,7 @@ describe('PUT /booking', () => {
 
     expect(response.status).toBe(httpStatus.OK);
     expect(response.body).toEqual({
-      bookingId: expect.any(Number),
+      roomId: expect.any(Number),
     });
   });
 
