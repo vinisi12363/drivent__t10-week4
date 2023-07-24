@@ -343,7 +343,7 @@ describe('PUT /booking', () => {
     expect(response.status).toBe(httpStatus.FORBIDDEN);
   });
 
- /* it('should return 404 when new room dont exists', async () => {
+  it('should return 404 when new room dont exists', async () => {
     const user = await createUser();
     const token = await generateValidToken(user);
     const enrollment = await createEnrollmentWithAddress(user);
@@ -351,18 +351,17 @@ describe('PUT /booking', () => {
     await createTicket(enrollment.id, ticketType.id, 'PAID');
     const hotel = await createHotel();
     const room = await createRoomWithHotelId(hotel.id);
-    const roomTwo = await createCustomRoomWithHotelId(hotel.id, 0);
     const booking = await createBooking({
        userId: user.id,
        roomId: room.id,
      });
     const response = await server
       .put(`/booking/${booking.id}`)
-      .send({ roomId: 9 })
+      .send({ roomId: 125 })
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(httpStatus.NOT_FOUND);
-  });*/
+  });
 
   it('should return 403 when bookingId as not sended', async () => {
     const user = await createUser();
