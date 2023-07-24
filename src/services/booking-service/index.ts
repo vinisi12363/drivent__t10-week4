@@ -6,7 +6,7 @@ import roomRepository from '../../repositories/rooms-repository';
 import { requestError } from '../../errors';
 
 
-async function verifyEnrollmentTicket(userId: number) {
+/*async function verifyEnrollmentTicket(userId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   if (!enrollment) throw notFoundError();
 
@@ -24,7 +24,7 @@ async function verifyValidBooking(roomId: number) {
   if (room.capacity <= bookings.length && room !== null) throw requestError(403, 'Forbidden');
   if (!room) throw notFoundError();
   
-}
+}*/
 
 
 async function getBooking(userId: number) {
@@ -43,23 +43,23 @@ async function bookingRoomById(userId: number, roomId: number) {
   if (!roomId) throw notFoundError();
 
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  
-  if (!enrollment) throw notFoundError();
-  
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
   const room = await roomRepository.findById(roomId)
+  const reservedbookings = await bookingRepository.findBookingByRoomId(roomId);
+
+  
+  if (!enrollment) throw notFoundError();
 
   if (!ticket || ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
     throw requestError(403, 'Forbidden');
   }
+
   if (!room) throw notFoundError();
  
-  
-
-  const reservedbookings = await bookingRepository.findBookingByRoomId(roomId);
   if (reservedbookings.length === room.capacity)   throw requestError(403, 'Forbidden');
  
-  const createdBooking=   await bookingRepository.createBooking({ roomId, userId });
+
+  const createdBooking=   await bookingRepository.createBooking( roomId, userId );
 
   return  createdBooking.id
 }
@@ -92,10 +92,7 @@ async function updateBookingRoomById(userId: number, bookingId:number ,roomId: n
   
 
   
-  const updatedBooking = await bookingRepository.updateBooking({
-    id: deletedBooking.id,
-    roomId:roomId,
-    userId:userId});
+  const updatedBooking = await bookingRepository.updateBooking(deletedBooking.id,roomId, userId);
 
   return updatedBooking.id
 }
@@ -104,8 +101,7 @@ async function updateBookingRoomById(userId: number, bookingId:number ,roomId: n
     bookingRoomById,
     getBooking,
     updateBookingRoomById,
-    verifyEnrollmentTicket,
-    verifyValidBooking,
+  
   };
 
 export default bookingService;
