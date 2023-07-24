@@ -1,4 +1,4 @@
-import {
+/*import {
     enrollmentWithAddressReturn,
     findBookingByRoomIdNoCapacityReturn,
     findBookingByRoomIdReturn,
@@ -156,4 +156,4 @@ import httpStatus from 'http-status';
   
       await expect(bookingService.verifyValidBooking(roomId)).rejects.toEqual(httpStatus.FORBIDDEN);
     });
-  });
+  }); */

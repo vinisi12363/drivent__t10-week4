@@ -455,6 +455,4 @@ describe('PUT /booking', () => {
     expect(response.status).toBe(httpStatus.FORBIDDEN);
   });
  
-  
-    
   });
