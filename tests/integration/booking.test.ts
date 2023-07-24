@@ -84,11 +84,7 @@ describe('GET /booking', () => {
       const hotel = await createHotel();
       const room = await createRoomWithHotelId(hotel.id);
 
-      const booking = await createBooking({
-        userId: user.id,
-        roomId: room.id,
-      });
-
+      const booking = await createBooking(user.id,room.id);
       const response = await server.get('/booking').set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toEqual(httpStatus.OK);
@@ -178,10 +174,7 @@ describe('POST /booking', () => {
     const hotel = await createHotel();
     const room = await createRoomWithHotelId(hotel.id);
     
-    const booking = await createBooking({
-      userId: user.id,
-      roomId: room.id,
-    });
+    const booking = await createBooking(user.id,room.id);
 
     const response = await server.get('/booking').set('Authorization', `Bearer ${token}`);
 
@@ -238,29 +231,7 @@ describe('POST /booking', () => {
     expect(response.status).toEqual(httpStatus.NOT_FOUND);
   });
 });
-/*
-    it('should respond with status 400 with a invalid body', async () => {
-      const user = await createUser();
-      const token = await generateValidToken(user);
-      const enrollment = await createEnrollmentWithAddress(user);
-      const ticketType = await createTicketTypeWithHotel();
-      const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
-      const payment = await createPayment(ticket.id, ticketType.price);
 
-      const hotel = await createHotel();
-      const room = await createRoomWithHotelId(hotel.id);
-
-      const validBody = createValidBody();
-      const response = await server.post('/booking').set('Authorization', `Bearer ${token}`).send({
-        roomId: 0,
-      });
-
-      expect(response.status).toEqual(httpStatus.BAD_REQUEST);
-    });
-
-  
-    
- */ 
 
 describe('PUT /booking', () => {
   it('should respond with status 401 if no token is given', async () => {
@@ -290,10 +261,7 @@ describe('PUT /booking', () => {
     const room = await createRoomWithHotelId(hotel.id);
     const roomTwo = await createRoomWithHotelId(hotel.id);
    
-    const booking =  await createBooking({
-      userId: user.id,
-      roomId: room.id,
-    });
+    const booking = await createBooking(user.id,room.id);
     const response = await server
       .put(`/booking/${booking.id}`)
       .send({ roomId: roomTwo.id })
@@ -331,10 +299,7 @@ describe('PUT /booking', () => {
     const hotel = await createHotel();
     const room = await createRoomWithHotelId(hotel.id);
     const roomTwo = await createCustomRoomWithHotelId(hotel.id, 0);
-   const booking = await createBooking({
-      userId: user.id,
-      roomId: room.id,
-    });
+    const booking = await createBooking(user.id,room.id);
     const response = await server
       .put(`/booking/${booking.id}`)
       .send({ roomId: roomTwo.id })
@@ -351,10 +316,7 @@ describe('PUT /booking', () => {
     await createTicket(enrollment.id, ticketType.id, 'PAID');
     const hotel = await createHotel();
     const room = await createRoomWithHotelId(hotel.id);
-    const booking = await createBooking({
-       userId: user.id,
-       roomId: room.id,
-     });
+    const booking = await createBooking(user.id,room.id);
     const response = await server
       .put(`/booking/${booking.id}`)
       .send({ roomId: 125 })
