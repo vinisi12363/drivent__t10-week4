@@ -64,9 +64,10 @@ import httpStatus from 'http-status';
   });
   
   describe('changeBookingRoomById function', () => {
-    it('should change booking boom by id', async () => {
+    it('should change booking room by id', async () => {
       const userId = 1;
       const roomId = 1;
+      const bookingId =1;
       const booking = getBookingReturn();
   
       
@@ -76,13 +77,14 @@ import httpStatus from 'http-status';
       jest.spyOn(bookingRepository, 'findBookingByUserId').mockResolvedValue(booking);
       jest.spyOn(bookingRepository, 'updateBooking').mockResolvedValue(booking);
   
-      const result = await bookingService.updateBookingRoomById(userId, roomId);
+      const result = await bookingService.updateBookingRoomById(userId,bookingId,roomId);
       expect(result).toEqual(booking);
     });
   
     it('should return booking error with booking not exists', async () => {
       const userId = 1;
-      const roomId = 1;
+      const roomId = 1;  
+      const bookingId =1;
       const booking = getBookingReturn();
   
      
@@ -91,12 +93,13 @@ import httpStatus from 'http-status';
   
       jest.spyOn(bookingRepository, 'findBookingByUserId').mockResolvedValue(null);
   
-      await expect(bookingService.updateBookingRoomById(userId, roomId)).rejects.toEqual(notFoundError());
+      await expect(bookingService.updateBookingRoomById(userId, bookingId ,roomId)).rejects.toEqual(notFoundError());
     });
   
     it('should return booking error with user id different from booking userid', async () => {
       const userId = 1;
       const roomId = 1;
+      const bookingId = 1;
       const booking = getBookingDifferentUserIdReturn();
   
      
@@ -106,7 +109,7 @@ import httpStatus from 'http-status';
       jest.spyOn(bookingRepository, 'findBookingByUserId').mockResolvedValue(booking);
       jest.spyOn(bookingRepository, 'updateBooking').mockResolvedValue(booking);
   
-      await expect(bookingService.updateBookingRoomById(userId, roomId)).rejects.toEqual(notFoundError());
+      await expect(bookingService.updateBookingRoomById(userId,bookingId,  roomId)).rejects.toEqual(notFoundError());
     });
   });
   

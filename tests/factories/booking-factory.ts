@@ -11,6 +11,7 @@ export function createBooking({ roomId, userId }: CreateBookingParams) {
     data: {
       userId,
       roomId,
+      updatedAt: new Date(),
     },
   });
 }
