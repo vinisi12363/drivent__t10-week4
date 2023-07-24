@@ -35,7 +35,7 @@ export async function selectBookingRoom(req: AuthenticatedRequest, res: Response
     }
 
     else if (error.statusText === 'Forbidden'){
-      return res.sendStatus(httpStatus.FORBIDDEN)..send({name:"Forbidden access", message:"you don't have authorization to acces"})
+      return res.sendStatus(httpStatus.FORBIDDEN).send({name:"Forbidden access", message:"you don't have authorization to acces"})
     }
 
     return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR)
