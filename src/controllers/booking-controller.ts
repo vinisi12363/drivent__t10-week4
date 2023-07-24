@@ -24,7 +24,7 @@ export async function selectBookingRoom(req: AuthenticatedRequest, res: Response
   try {
   const { userId } = req;
   const { roomId } = req.body as Record<string, number>;
-  if(!userId || !roomId || roomId === null) return res.status(httpStatus.BAD_REQUEST)
+  
     const resultId = await bookingService.bookingRoomById(userId, roomId);
     console.log ("result  do post", resultId)
     return res.send({ bookingId: resultId });
@@ -49,11 +49,7 @@ export async function updateBooking(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const bookingId = Number(req.params.bookingId);
   const { roomId } = req.body as Record<string, number>;
-
-
-  if (!bookingId || bookingId === null) return res.status(httpStatus.BAD_REQUEST)
-
-  
+ 
     const updatedBooking = await bookingService.updateBookingRoomById(userId, bookingId, roomId)
     return res.send({ bookingId: updatedBooking })
   } catch (error) {

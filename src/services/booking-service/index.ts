@@ -40,7 +40,7 @@ async function getBooking(userId: number) {
 }
 
 async function bookingRoomById(userId: number, roomId: number) {
-  if (!roomId) throw notFoundError();
+  if (!roomId || roomId === null) throw notFoundError();
 
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
@@ -54,7 +54,7 @@ async function bookingRoomById(userId: number, roomId: number) {
     throw requestError(403, 'Forbidden');
   }
 
-  if (!room) throw notFoundError();
+  if (!room) throw Error('notFound');
  
   if (reservedbookings.length === room.capacity)   throw requestError(403, 'Forbidden');
  
@@ -65,9 +65,9 @@ async function bookingRoomById(userId: number, roomId: number) {
 }
 
 async function updateBookingRoomById(userId: number, bookingId:number ,roomId: number) {
-  if(!bookingId) throw requestError(403, 'Forbidden');
+  if(!bookingId || bookingId === null) throw requestError(403, 'Forbidden');
  
-  if (!roomId) throw notFoundError();
+  if (!roomId || roomId === null) throw notFoundError();
   //verificar se o user tem quarto reservado
   const originalReserve = await bookingRepository.findBookingByUserId(userId);
 
