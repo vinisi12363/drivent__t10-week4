@@ -134,7 +134,7 @@ describe('POST /booking', () => {
   it('should respond with NotFoundError', async () => {
     const user = await createUser();
     try {
-      await bookingService.bookingRoomById(user.id, 1);
+      await bookingService.bookingRoomById(user.id, 12);
       expect(true).toBe(false);
     } catch (error) {
       expect(error).toEqual(notFoundError());
