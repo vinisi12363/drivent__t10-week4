@@ -218,7 +218,7 @@ describe('POST /booking', () => {
 
 
 describe('PUT /booking', () => {
-  it('should respond with status 401 if no token is given', async () => {
+ it('should respond with status 401 if no token is given', async () => {
     const validBody = createValidBody();
     const response = await server.put('/booking/1').send(validBody);
 
@@ -309,7 +309,7 @@ describe('PUT /booking', () => {
       .send({ roomId: 1})
       .set('Authorization', `Bearer ${token}`);
 
-    expect(response.status).toBe(httpStatus.NOT_FOUND);
+      expect(response.status).toEqual(httpStatus.NOT_FOUND);
   });
 
 });

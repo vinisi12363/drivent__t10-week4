@@ -57,12 +57,8 @@ async function updateBookingRoomById(userId: number, bookingId:number ,newRoomId
     throw requestError(403, 'Forbidden');
   }
 
-  const room = await roomRepository.findById(newRoomId);
-  console.log("ROOM",room)
-  if (!room || room === null) {
-   console.log( "entrou aqui no erro null")
-   throw notFoundError();
-  }
+  const room = await roomRepository.findById(newRoomId)
+  if (!room) throw notFoundError();
  
 
   const bookingsToRoom = await bookingRepository.findBookingByRoomId(newRoomId);

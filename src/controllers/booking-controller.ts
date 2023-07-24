@@ -54,12 +54,12 @@ export async function updateBooking(req: AuthenticatedRequest, res: Response) {
     
     return res.send({ bookingId: updatedBooking })
   } catch (error) {
-   
+   console.log("ERROR DENTRO DO UPDATE", error)
     if (error.name === 'NotFoundError') {
-      return res.status(httpStatus.NOT_FOUND)
+      return res.status(httpStatus.NOT_FOUND).send({name:"not Found", message:"No result for this search"})
     }
     else if (error.statusText === 'Forbidden'){
-      return res.sendStatus(httpStatus.FORBIDDEN)
+      return res.sendStatus(httpStatus.FORBIDDEN).send({name:"Forbidden access", message:"you don't have authorization to acces"})
     }
     return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR)
   }
